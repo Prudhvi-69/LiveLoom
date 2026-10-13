@@ -25,7 +25,7 @@
     --accent: #f2f2f2;
     --accent-hover: #ffffff;
     --accent-contrast: #111111;
-    --preview: #ffffff;
+    --preview: #2b2b2b;
     --error-bg: #292929;
     --error-text: #f2f2f2;
     --scrollbar: #4a4a4a;
@@ -63,7 +63,7 @@
     --accent: #282825;
     --accent-hover: #3b3b37;
     --accent-contrast: #ffffff;
-    --preview: #ffffff;
+    --preview: #2b2b2b;
     --error-bg: #f0ede7;
     --error-text: #2d2b26;
     --scrollbar: #c4c1b9;
@@ -95,7 +95,7 @@
     --accent: #42684a;
     --accent-hover: #35563c;
     --accent-contrast: #ffffff;
-    --preview: #ffffff;
+    --preview: #2b2b2b;
     --error-bg: #f0ece2;
     --error-text: #393323;
     --scrollbar: #aab89f;
@@ -127,7 +127,7 @@
     --accent: #b5ee55;
     --accent-hover: #c5f56e;
     --accent-contrast: #17200d;
-    --preview: #ffffff;
+    --preview: #2b2b2b;
     --error-bg: #25271e;
     --error-text: #f1f4e9;
     --scrollbar: #49533f;
@@ -596,7 +596,26 @@ summary:focus-visible,
     gap: 12px;
     padding: 7px 14px;
     border-bottom: 1px solid var(--line);
-    background: var(--surface);
+    background-image: url('Loom%20Logo.jpg');
+    background-size: cover;
+    background-position: 53% 48%;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.editor-header::before,
+.preview-header::before {
+    position: absolute;
+    inset: 0;
+    background: color-mix(in srgb, var(--surface) 82%, transparent);
+    content: "";
+    pointer-events: none;
+}
+
+.editor-header > *,
+.preview-header > * {
+    position: relative;
+    z-index: 1;
 }
 
 .editor-language,

@@ -392,7 +392,7 @@ ${cssCode.value}
 
         const previewDocument = preview.contentDocument || preview.contentWindow.document;
         previewDocument.open();
-        previewDocument.write(html + css + js);
+        previewDocument.write(`<style>html{background:#2b2b2b}</style>` + html + css + js);
         previewDocument.close();
     } catch (error) {
         console.error('Preview error:', error);
