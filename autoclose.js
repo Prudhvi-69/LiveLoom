@@ -164,4 +164,5 @@
     }
 
     window.setupHtmlAutoClose = setupHtmlAutoClose;
+    export { setupHtmlAutoClose };
 })();

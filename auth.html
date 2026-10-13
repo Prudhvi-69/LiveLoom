@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiveLoom — Sign In</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <script>
+        (() => {
+            const t = localStorage.getItem('liveloom_appearance');
+            document.documentElement.dataset.theme = ['light','dark','eco','neon'].includes(t) ? t : 'dark';
+        })();
+    </script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body class="auth-body">
+    <div class="auth-card">
+        <div class="auth-brand">
+            <img src="Loom%20Logo.jpg" alt="" class="auth-logo">
+            <span class="brand">LiveLoom</span>
+        </div>
+
+        <div class="auth-tabs">
+            <button class="auth-tab is-active" data-tab="signin">Sign In</button>
+            <button class="auth-tab" data-tab="signup">Sign Up</button>
+        </div>
+
+        <form id="auth-form" novalidate>
+            <div class="form-group">
+                <label for="auth-email">Email</label>
+                <input type="email" id="auth-email" placeholder="you@example.com" autocomplete="email" required>
+            </div>
+            <div class="form-group">
+                <label for="auth-password">Password</label>
+                <input type="password" id="auth-password" placeholder="••••••••" autocomplete="current-password" required>
+            </div>
+            <p id="auth-error" class="auth-error" role="alert" aria-live="assertive"></p>
+            <button type="submit" id="auth-submit" class="btn btn-primary auth-submit">Sign In</button>
+        </form>
+    </div>
+
+    <script type="module">
+        import { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged }
+            from './firebase.js';
+
+        // Already logged in → go to app
+        onAuthStateChanged(auth, user => {
+            if (user) window.location.href = 'index.html';
+        });
+
+        let mode = 'signin';
+        const form = document.getElementById('auth-form');
+        const emailInput = document.getElementById('auth-email');
+        const passwordInput = document.getElementById('auth-password');
+        const errorEl = document.getElementById('auth-error');
+        const submitBtn = document.getElementById('auth-submit');
+
+        document.querySelectorAll('.auth-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                mode = tab.dataset.tab;
+                document.querySelectorAll('.auth-tab').forEach(t => t.classList.toggle('is-active', t === tab));
+                submitBtn.textContent = mode === 'signin' ? 'Sign In' : 'Create Account';
+                errorEl.textContent = '';
+            });
+        });
+
+        form.addEventListener('submit', async e => {
+            e.preventDefault();
+            errorEl.textContent = '';
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Please wait…';
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            try {
+                if (mode === 'signup') {
+                    await createUserWithEmailAndPassword(auth, email, password);
+                } else {
+                    await signInWithEmailAndPassword(auth, email, password);
+                }
+                window.location.href = 'index.html';
+            } catch (err) {
+                errorEl.textContent = friendlyError(err.code);
+                submitBtn.disabled = false;
+                submitBtn.textContent = mode === 'signin' ? 'Sign In' : 'Create Account';
+            }
+        });
+
+        function friendlyError(code) {
+            const map = {
+                'auth/invalid-email': 'Invalid email address.',
+                'auth/user-not-found': 'No account found with this email.',
+                'auth/wrong-password': 'Incorrect password.',
+                'auth/email-already-in-use': 'An account with this email already exists.',
+                'auth/weak-password': 'Password must be at least 6 characters.',
+                'auth/too-many-requests': 'Too many attempts. Try again later.',
+                'auth/invalid-credential': 'Invalid email or password.',
+            };
+            return map[code] || 'Something went wrong. Please try again.';
+        }
+    </script>
+</body>
+</html>
