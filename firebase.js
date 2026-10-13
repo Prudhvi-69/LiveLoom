@@ -4,14 +4,13 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, si
 import { getFirestore, collection, doc, setDoc, getDocs, deleteDoc, query, where }
     from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// 🔴 Replace these values with your Firebase project config
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyA-ev7xtfHKPoXesy3RaQhUbOGmYEAfEjw",
+    authDomain: "liveloom-39bd4.firebaseapp.com",
+    projectId: "liveloom-39bd4",
+    storageBucket: "liveloom-39bd4.firebasestorage.app",
+    messagingSenderId: "1036037950434",
+    appId: "1:1036037950434:web:5b051fe6bd46d369ce87bb"
 };
 
 const app = initializeApp(firebaseConfig);
