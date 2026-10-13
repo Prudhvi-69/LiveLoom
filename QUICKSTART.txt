@@ -1,0 +1,45 @@
+LiveLoom — Quick Start
+======================
+
+LiveLoom is an offline HTML, CSS, and JavaScript workspace with local project storage and an instant preview.
+
+Appearance
+----------
+Choose Light, Dark, Eco, or Neon from the Appearance selector in the toolbar. LiveLoom remembers the selected mode separately from your projects; it does not mark code as edited or save a project. The code preview stays white in every mode.
+
+Start
+-----
+1. Open index.html in a modern browser.
+2. Write code in the HTML, CSS, and JavaScript editors.
+3. Watch the preview update as you type.
+4. Enter a project name and choose Save project.
+
+Projects
+--------
+- Choose New to start another project.
+- Choose Projects to open the saved-project list.
+- Select a project to load it; use Delete to remove one project.
+- Choose Clear all to remove every saved project from this browser.
+- Existing projects auto-save three seconds after edits. New, unsaved work is not stored until you save it.
+
+Export
+------
+Choose Export HTML to download a standalone file containing the current HTML, CSS, and JavaScript.
+
+Editors and preview
+-------------------
+- The three editors stay stacked on desktop; drag the center divider to resize the preview.
+- On narrow screens, use Editors and Preview to switch between the code and rendered result.
+- Tab inserts four spaces. The HTML editor automatically adds closing tags after `>` where appropriate.
+- Choose Refresh preview to render the current code again.
+
+Keyboard shortcuts
+------------------
+Ctrl/Cmd + S  Save project
+Ctrl/Cmd + N  New project
+Ctrl/Cmd + E  Export HTML
+Tab           Insert four spaces in an editor
+
+Storage and backups
+-------------------
+Projects are stored in this browser's LocalStorage and are not synced across devices. Clearing browser data removes them. Export important work as HTML backups. The app does not require a server, account, or external service.

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#111111">
+    <title>LiveLoom</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="description" content="LiveLoom is an offline HTML, CSS, and JavaScript workspace with a live preview.">
+    <script>
+        (() => {
+            const themes = ['light', 'dark', 'eco', 'neon'];
+            try {
+                const savedTheme = localStorage.getItem('liveloom_appearance');
+                document.documentElement.dataset.theme = themes.includes(savedTheme) ? savedTheme : 'dark';
+            } catch (error) {
+                document.documentElement.dataset.theme = 'dark';
+            }
+        })();
+    </script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body data-mobile-view="editors">
+    <header class="toolbar">
+        <div class="toolbar-left">
+            <img class="brand-mark" src="Loom%20Logo.jpg" alt="" width="34" height="30" decoding="async">
+            <div class="brand">LiveLoom</div>
+            <span class="toolbar-divider" aria-hidden="true"></span>
+            <button id="toggle-sidebar" class="btn btn-quiet" type="button" aria-controls="sidebar" aria-expanded="false">Projects</button>
+        </div>
+
+        <div class="toolbar-project">
+            <label class="visually-hidden" for="project-name">Project name</label>
+            <input type="text" id="project-name" placeholder="Untitled project" class="project-input" autocomplete="off">
+            <span id="current-project" class="current-project visually-hidden">New project</span>
+            <div class="appearance-control">
+                <label id="appearance-label" class="appearance-label" for="appearance-select">Appearance</label>
+                <select id="appearance-select" class="appearance-select" aria-labelledby="appearance-label">
+                    <option value="light">Light</option>
+                    <option value="dark">Dark</option>
+                    <option value="eco">Eco</option>
+                    <option value="neon">Neon</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="toolbar-right">
+            <button id="new-project" class="btn btn-secondary" type="button" aria-label="New project">New</button>
+            <span id="save-status" class="save-status" role="status" aria-live="polite">Not saved</span>
+            <button id="save-project" class="btn btn-primary" type="button" aria-label="Save project"><span class="desktop-label">Save project</span><span class="compact-label" aria-hidden="true">Save</span></button>
+            <button id="export-project" class="btn btn-quiet" type="button" aria-label="Export project as HTML"><span class="desktop-label">Export HTML</span><span class="compact-label" aria-hidden="true">Export</span></button>
+            <button id="clear-all" class="btn btn-danger" type="button" aria-label="Clear all saved projects"><span class="desktop-label">Clear all</span><span class="compact-label" aria-hidden="true">Clear</span></button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <aside id="sidebar" class="sidebar" aria-label="Projects" aria-hidden="true" inert>
+            <div class="sidebar-header">
+                <h2>Projects</h2>
+                <button id="close-sidebar" class="close-btn" type="button" aria-label="Close projects">Close</button>
+            </div>
+            <div id="projects-list" class="projects-list"></div>
+        </aside>
+
+        <div class="workspace">
+            <div id="workspace-view-switch" class="workspace-view-switch" role="group" aria-label="Workspace view">
+                <button class="workspace-view-button is-active" type="button" data-view="editors" aria-pressed="true">Editors</button>
+                <button class="workspace-view-button" type="button" data-view="preview" aria-pressed="false">Preview</button>
+            </div>
+
+            <main class="container">
+                <section class="left-panel" id="left-panel" aria-label="Code editors">
+                    <section class="editor-section" aria-labelledby="html-label">
+                        <div class="editor-header">
+                            <span class="editor-language" id="html-label">HTML</span>
+                            <span class="editor-status">
+                                <span class="file-info" id="html-info" aria-hidden="true"></span>
+                                <span class="editor-save-state">Not saved</span>
+                            </span>
+                        </div>
+                        <textarea id="html-code" class="code-editor" aria-label="HTML editor" placeholder="Write HTML here..." spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+                    </section>
+                    <section class="editor-section" aria-labelledby="css-label">
+                        <div class="editor-header">
+                            <span class="editor-language" id="css-label">CSS</span>
+                            <span class="editor-status">
+                                <span class="file-info" id="css-info" aria-hidden="true"></span>
+                                <span class="editor-save-state">Not saved</span>
+                            </span>
+                        </div>
+                        <textarea id="css-code" class="code-editor" aria-label="CSS editor" placeholder="Write CSS here..." spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+                    </section>
+                    <section class="editor-section" aria-labelledby="js-label">
+                        <div class="editor-header">
+                            <span class="editor-language" id="js-label">JavaScript</span>
+                            <span class="editor-status">
+                                <span class="file-info" id="js-info" aria-hidden="true"></span>
+                                <span class="editor-save-state">Not saved</span>
+                            </span>
+                        </div>
+                        <textarea id="js-code" class="code-editor" aria-label="JavaScript editor" placeholder="Write JavaScript here..." spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+                    </section>
+                </section>
+
+                <div class="resizer" id="resizer" role="separator" aria-label="Resize editors and preview" aria-orientation="vertical" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" tabindex="0"></div>
+
+                <section class="right-panel" id="right-panel" aria-label="Live preview">
+                    <div class="preview-header">
+                        <span>Live preview</span>
+                        <button id="refresh-preview" class="btn btn-quiet refresh-btn" type="button">Refresh preview</button>
+                    </div>
+                    <iframe id="preview" title="Live code preview"></iframe>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-message">
+        <div class="modal-content">
+            <h2 id="modal-title">Message</h2>
+            <p id="modal-message"></p>
+            <div class="modal-buttons">
+                <button id="modal-confirm" class="btn btn-primary" type="button">OK</button>
+                <button id="modal-cancel" class="btn btn-secondary" type="button">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="autoclose.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
