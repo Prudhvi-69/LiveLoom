@@ -201,13 +201,26 @@ summary:focus-visible,
     justify-content: space-between;
     gap: 20px;
     padding: 12px 20px;
-    background: var(--surface);
+    background-image: url('Loom%20Logo.jpg');
+    background-size: cover;
+    background-position: 53% 48%;
+    background-repeat: no-repeat;
     border-bottom: 1px solid var(--line);
+}
+
+.toolbar::before {
+    position: absolute;
+    inset: 0;
+    background: color-mix(in srgb, var(--surface) 82%, transparent);
+    content: "";
+    pointer-events: none;
 }
 
 .toolbar-left,
 .toolbar-project,
 .toolbar-right {
+    position: relative;
+    z-index: 1;
     display: flex;
     min-width: 0;
     align-items: center;
@@ -652,6 +665,54 @@ summary:focus-visible,
 .code-editor::selection {
     background: var(--selection);
     color: var(--selection-text);
+}
+
+.editor-resizer {
+    position: relative;
+    z-index: 1;
+    height: 7px;
+    flex: 0 0 7px;
+    background: var(--line);
+    cursor: row-resize;
+    transition: background-color 150ms ease;
+}
+
+.editor-resizer::before {
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    right: 0;
+    bottom: -5px;
+    left: 0;
+    content: "";
+}
+
+.editor-resizer::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 28px;
+    height: 2px;
+    transform: translate(-50%, -50%);
+    border-radius: 2px;
+    background: var(--text-subtle);
+    content: "";
+}
+
+.editor-resizer:hover,
+.editor-resizer.resizing {
+    background: var(--accent);
+}
+
+.editor-resizer:hover::after,
+.editor-resizer.resizing::after {
+    background: var(--accent-contrast);
+}
+
+body.resizing-editor,
+body.resizing-editor * {
+    cursor: row-resize !important;
+    user-select: none;
 }
 
 .resizer {

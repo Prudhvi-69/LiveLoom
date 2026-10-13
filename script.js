@@ -519,6 +519,7 @@ function setupEventListeners() {
     });
 
     setupResizer();
+    setupEditorResizers();
 
     document.addEventListener('keydown', event => {
         if (event.key === 'Escape' && modal.classList.contains('active')) {
@@ -559,6 +560,68 @@ function setupEventListeners() {
     });
 
     setupHtmlAutoClose(htmlCode);
+}
+
+// Vertical editor panel resizing
+function setupEditorResizers() {
+    const leftPanel = document.getElementById('left-panel');
+
+    [['editor-resizer-1', 0, 1], ['editor-resizer-2', 1, 2]].forEach(([id, topIdx, botIdx]) => {
+        const resizer = document.getElementById(id);
+        const sections = leftPanel.querySelectorAll('.editor-section');
+        const top = sections[topIdx];
+        const bot = sections[botIdx];
+        let isResizing = false;
+        let startY = 0;
+        let startTopH = 0;
+        let startBotH = 0;
+
+        resizer.addEventListener('mousedown', event => {
+            isResizing = true;
+            startY = event.clientY;
+            startTopH = top.offsetHeight;
+            startBotH = bot.offsetHeight;
+            resizer.classList.add('resizing');
+            document.body.classList.add('resizing-editor');
+            event.preventDefault();
+        });
+
+        document.addEventListener('mousemove', event => {
+            if (!isResizing) return;
+            const delta = event.clientY - startY;
+            const minH = 60;
+            const newTopH = startTopH + delta;
+            const newBotH = startBotH - delta;
+            if (newTopH >= minH && newBotH >= minH) {
+                top.style.flex = 'none';
+                bot.style.flex = 'none';
+                top.style.height = `${newTopH}px`;
+                bot.style.height = `${newBotH}px`;
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (!isResizing) return;
+            isResizing = false;
+            resizer.classList.remove('resizing');
+            document.body.classList.remove('resizing-editor');
+        });
+
+        resizer.addEventListener('keydown', event => {
+            if (!['ArrowUp', 'ArrowDown'].includes(event.key)) return;
+            event.preventDefault();
+            const step = event.shiftKey ? 20 : 5;
+            const delta = event.key === 'ArrowDown' ? step : -step;
+            const newTopH = top.offsetHeight + delta;
+            const newBotH = bot.offsetHeight - delta;
+            if (newTopH >= 60 && newBotH >= 60) {
+                top.style.flex = 'none';
+                bot.style.flex = 'none';
+                top.style.height = `${newTopH}px`;
+                bot.style.height = `${newBotH}px`;
+            }
+        });
+    });
 }
 
 // Desktop split resizing
